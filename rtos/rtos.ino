@@ -82,22 +82,23 @@ static void system1(void *pvParameters)
 {
   while (1)
   {
-    // if (isOn) {
+    if (isOn)
+    {
 
-    ldrValue = analogRead(ldrPin);
-    Serial.print("LDR value is :");
-    Serial.print(ldrValue);
-    Serial.print("\n");
-    if (ldrValue < 600)
-    {
-      digitalWrite(iluminacaoInterior, HIGH);
+      ldrValue = analogRead(ldrPin);
+      Serial.print("LDR value is :");
+      Serial.print(ldrValue);
+      Serial.print("\n");
+      if (ldrValue < 600)
+      {
+        digitalWrite(iluminacaoInterior, HIGH);
+      }
+      else
+      {
+        digitalWrite(iluminacaoInterior, LOW);
+      }
+      Serial.println(F("readLDR"));
     }
-    else
-    {
-      digitalWrite(iluminacaoInterior, LOW);
-    }
-    Serial.println(F("readLDR"));
-    //}
     vTaskDelay(120 / portTICK_PERIOD_MS);
   }
 }
@@ -106,41 +107,41 @@ static void system2(void *pvParameters)
 {
   for (;;)
   {
-    // if (isOn) {
-    temperatura = dht.readTemperature();
-
-    if (temperatura >= 19)
+    if (isOn)
     {
-      isFanOn = true;
-      digitalWrite(fanPin, HIGH);
-    }
-    else if (temperatura <= 18)
-    {
-      isFanOn = false;
-      digitalWrite(fanPin, LOW);
-    }
+      temperatura = dht.readTemperature();
 
-    if (isFanOn)
-    {
-      digitalWrite(fanOnLed, HIGH);
-      digitalWrite(fanOffLed, LOW);
-    }
-    else
-    {
-      digitalWrite(fanOnLed, LOW);
-      digitalWrite(fanOffLed, HIGH);
-    }
+      if (temperatura >= 19)
+      {
+        isFanOn = true;
+        digitalWrite(fanPin, HIGH);
+      }
+      else if (temperatura <= 18)
+      {
+        isFanOn = false;
+        digitalWrite(fanPin, LOW);
+      }
 
-    Serial.print("Temperatura:");
-    Serial.print(temp);
-    Serial.print("*C | Fan: ");
-    if (isFanOn)
-      Serial.print("ON");
-    else
-      Serial.print("OFF");
-    // writeTempFanState(isFanOn);
+      if (isFanOn)
+      {
+        digitalWrite(fanOnLed, HIGH);
+        digitalWrite(fanOffLed, LOW);
+      }
+      else
+      {
+        digitalWrite(fanOnLed, LOW);
+        digitalWrite(fanOffLed, HIGH);
+      }
 
-    //}
+      Serial.print("Temperatura:");
+      Serial.print(temp);
+      Serial.print("*C | Fan: ");
+      if (isFanOn)
+        Serial.print("ON");
+      else
+        Serial.print("OFF");
+      // writeTempFanState(isFanOn);
+    }
     vTaskDelay(140 / portTICK_PERIOD_MS);
   }
 }
@@ -194,44 +195,45 @@ static void system3(void *pvParameters)
 {
   while (1)
   {
-    // if (isOn) {
-    digitalWrite(trigPin, LOW);
-    delayMicroseconds(2);
-
-    digitalWrite(trigPin, OUTPUT);
-    delayMicroseconds(10);
-    digitalWrite(trigPin, LOW);
-
-    duration = pulseIn(echoPin, HIGH);
-
-    distance = duration * 0.034 / 2;
-
-    Serial.print("Distance: ");
-    Serial.print(distance);
-    Serial.println("cm");
-
-    if (distance <= 20 && distance > 3.0)
+    if (isOn)
     {
-      sound(distance);
-      digitalWrite(greenLed, LOW);
-      delay(500);
-    }
-    else if (distance <= 3)
-    {
-      noTone(buzzerPin);
-      digitalWrite(redLed, LOW);
-      digitalWrite(greenLed, HIGH);
-      delay(500);
-    }
-    else
-    {
+      digitalWrite(trigPin, LOW);
+      delayMicroseconds(2);
 
-      noTone(buzzerPin);
-      digitalWrite(redLed, LOW);
-      digitalWrite(greenLed, LOW);
+      digitalWrite(trigPin, OUTPUT);
+      delayMicroseconds(10);
+      digitalWrite(trigPin, LOW);
+
+      duration = pulseIn(echoPin, HIGH);
+
+      distance = duration * 0.034 / 2;
+
+      Serial.print("Distance: ");
+      Serial.print(distance);
+      Serial.println("cm");
+
+      if (distance <= 20 && distance > 3.0)
+      {
+        sound(distance);
+        digitalWrite(greenLed, LOW);
+        delay(500);
+      }
+      else if (distance <= 3)
+      {
+        noTone(buzzerPin);
+        digitalWrite(redLed, LOW);
+        digitalWrite(greenLed, HIGH);
+        delay(500);
+      }
+      else
+      {
+
+        noTone(buzzerPin);
+        digitalWrite(redLed, LOW);
+        digitalWrite(greenLed, LOW);
+      }
+      Serial.println(F("distance"));
     }
-    Serial.println(F("distance"));
-    //}
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
