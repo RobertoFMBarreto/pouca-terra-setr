@@ -2,14 +2,14 @@
 #include <LiquidCrystal.h> // includes the LiquidCrystal Library
 #include "DHT.h"
 
-#define DHTPIN 4 // Digital pin connected to the DHT sensor
+#define DHTPIN A0 // Digital pin connected to the DHT sensor
 
 #define DHTTYPE DHT11 // DHT 11
 
 LiquidCrystal lcd(9, 8, 13, 12, 11, 10); // Creates an LCD object. Parameters: (rs, enable, d4, d5, d6, d7)
 
 int ldrPin = A1;
-int ldrValue = 0;
+int ldrValue = A2;
 int iluminacaoInterior = 9;
 
 int fanOnLed = 8;
